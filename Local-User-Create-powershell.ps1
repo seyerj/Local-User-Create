@@ -6,6 +6,7 @@
 
 # Define the path to the text file containing the list of names
 $namesFilePath = "C:\Temp\local-usrs.txt"
+# $logfile = "C:\Temp\Local-usrs.log"
 
 # Read the list of names from the text file
 $names = Get-Content $namesFilePath
@@ -15,8 +16,9 @@ foreach ($name in $names) {
     # Check if a user account with this name exists
     if (-not (Get-LocalUser -Name $name -ErrorAction SilentlyContinue)) {
         # If the account doesn't exist, create it
-        New-LocalUser -Name $name -noPassword -Description "Local user Account for $name"
+        New-LocalUser -Name $name -noPassword -Disabled -Description "Local user Account for $name"
         Set-LocalUser -Name $name -PasswordNeverExpires $true
+        # Write-log "Created user account for $name"
         Write-Host "Created user account for $name."
     }
     else {
